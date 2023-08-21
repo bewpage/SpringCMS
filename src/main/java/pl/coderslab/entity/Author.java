@@ -1,30 +1,28 @@
 package pl.coderslab.entity;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "authors")
 @Getter
 @Setter
-public class Category {
+public class Author {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Integer Id;
 
-  private String name;
+  private String firstName;
+  private String lastName;
 
-  @Column(nullable = true)
-  private String description;
-
-  @ManyToMany(mappedBy = "categories")
-  private Set<Article> articles = new HashSet<>();
+  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Article> articles = new ArrayList<>();
 
   @Override
   public final boolean equals(Object o) {
@@ -39,8 +37,8 @@ public class Category {
             ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
             : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) return false;
-    Category category = (Category) o;
-    return getId() != null && Objects.equals(getId(), category.getId());
+    Author author = (Author) o;
+    return getId() != null && Objects.equals(getId(), author.getId());
   }
 
   @Override
