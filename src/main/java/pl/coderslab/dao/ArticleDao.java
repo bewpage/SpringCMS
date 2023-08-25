@@ -14,23 +14,23 @@ public class ArticleDao {
 
   @PersistenceContext private EntityManager entityManager;
 
-  public void saveArticle(Article article) {
+  public void save(Article article) {
     entityManager.persist(article);
   }
 
-  public Article findArticleById(Integer id) {
+  public Article findById(Integer id) {
     return entityManager.find(Article.class, id);
   }
 
-  public void updateArticle(Article article) {
+  public void update(Article article) {
     entityManager.merge(article);
   }
 
-  public void deleteArticle(Article article) {
+  public void delete(Article article) {
     entityManager.remove(entityManager.contains(article) ? article : entityManager.merge(article));
   }
 
-  public List<Article> findAllArticles() {
+  public List<Article> findAll() {
     return entityManager.createQuery("SELECT a FROM Article a").getResultList();
   }
 }
