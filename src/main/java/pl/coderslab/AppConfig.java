@@ -1,8 +1,11 @@
 package pl.coderslab;
 
+import javax.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -11,8 +14,9 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
-import javax.persistence.EntityManagerFactory;
+import pl.coderslab.converter.AuthorConverter;
+import pl.coderslab.converter.ArticleConverter;
+import pl.coderslab.converter.CategoryConverter;
 
 @Configuration
 @EnableWebMvc
@@ -20,6 +24,11 @@ import javax.persistence.EntityManagerFactory;
 @EnableTransactionManagement
 @EnableScheduling
 public class AppConfig extends WebMvcConfigurerAdapter {
+
+  @Autowired private ArticleConverter articleConverter;
+  @Autowired private AuthorConverter authorConverter;
+  @Autowired private CategoryConverter categoryConverter;
+
   @Bean
   public LocalEntityManagerFactoryBean entityManagerFactory() {
     LocalEntityManagerFactoryBean emfb = new LocalEntityManagerFactoryBean();
@@ -41,5 +50,12 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     viewResolver.setSuffix(".jsp");
 
     return viewResolver;
+  }
+
+  @Override
+  public void addFormatters(FormatterRegistry registry) {
+    registry.addConverter(articleConverter);
+    registry.addConverter(authorConverter);
+    registry.addConverter(categoryConverter);
   }
 }

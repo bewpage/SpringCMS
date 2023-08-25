@@ -28,12 +28,12 @@ public class Article {
   @JoinColumn(name = "author_id")
   private Author author;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   private @JoinTable(
       name = "articles_categories",
       joinColumns = @JoinColumn(name = "article_id"),
-      inverseJoinColumns = @JoinColumn(name = "category_id")) Set<Category> categories =
-      new HashSet<>();
+      inverseJoinColumns = @JoinColumn(name = "category_id"))
+  Set<Category> categories = new HashSet<>();
 
   @Lob private String content;
 

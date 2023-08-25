@@ -2,6 +2,8 @@ package pl.coderslab.dao;
 
 import org.springframework.stereotype.Repository;
 import pl.coderslab.entity.Article;
+import pl.coderslab.entity.Author;
+import pl.coderslab.entity.Category;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +20,7 @@ public class ArticleDao {
     entityManager.persist(article);
   }
 
-  public Article findById(Integer id) {
+  public Article findById(Long id) {
     return entityManager.find(Article.class, id);
   }
 
@@ -26,11 +28,30 @@ public class ArticleDao {
     entityManager.merge(article);
   }
 
+  @Transactional
   public void delete(Article article) {
-    entityManager.remove(entityManager.contains(article) ? article : entityManager.merge(article));
+    Article managedArticle =
+        entityManager.contains(article) ? article : entityManager.merge(article);
+
+    for (Category category : managedArticle.getCategories()) {
+      category.getArticles().remove(managedArticle);
+    }
+
+    Author author = managedArticle.getAuthor();
+    if (author != null) {
+      author.getArticles().remove(managedArticle);
+    }
+    entityManager.remove(managedArticle);
   }
 
   public List<Article> findAll() {
     return entityManager.createQuery("SELECT a FROM Article a").getResultList();
+  }
+
+  public List<Article> findLastFive() {
+    return entityManager
+        .createQuery("SELECT a FROM Article a ORDER BY a.created DESC")
+        .setMaxResults(5)
+        .getResultList();
   }
 }

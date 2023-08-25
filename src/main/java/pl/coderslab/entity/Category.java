@@ -23,7 +23,7 @@ public class Category {
   @Column(nullable = true)
   private String description;
 
-  @ManyToMany(mappedBy = "categories")
+  @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
   private Set<Article> articles = new HashSet<>();
 
   @Override
