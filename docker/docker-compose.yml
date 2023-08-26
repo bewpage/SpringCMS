@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mysql-dev-hibernate-hm:
     image: mysql:8.0
-    container_name: hibernate
+    container_name: hibernate-hw
     cap_add:
       - SYS_NICE
     restart: no
@@ -13,8 +13,8 @@ services:
     ports:
       - "6605:3306"
     volumes:
-        - db:/var/lib/mysql
+        - db_hibernate-hw:/var/lib/mysql
         - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
-    db:
+    db_hibernate-hw:
       driver: local
