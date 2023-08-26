@@ -9,9 +9,9 @@
 <hr>
 <h2>Title: ${article.title}</h2>
 <p>Content: ${article.content}</p>
-<p>Author: ${article.author}</p>
-<p>Created: ${article.created}</p>
-<p>Updated: ${article.updated}</p>
+<p>Author: ${article.author.firstName} ${article.author.lastName}</p>
+<p>Created: ${formattedCreated}</p>
+<p>Updated: ${formattedUpdated}</p>
 <p>Categories</p>
 <ul>
     <c:forEach items="${article.categories}" var="category">

@@ -12,6 +12,8 @@ import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Category;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -43,7 +45,27 @@ public class ArticleController {
   @GetMapping("/details")
   public String getArticle(Model model, @RequestParam Long id) {
     Article article = articleDao.findById(id);
+
+    LocalDateTime created = article.getCreated();
+    LocalDateTime updated = article.getUpdated();
+
+    // format created date
+    DateTimeFormatter formatterCreated = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String formattedCreated = created.format(formatterCreated);
+
+    // format updated date
+    DateTimeFormatter formatterUpdated = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String formattedUpdated = updated.format(formatterUpdated);
+
+    // add formatted updated date to model if updated date is not null
+    if (updated != null) {
+      model.addAttribute("formattedUpdated", formattedUpdated);
+    }
+    // add formatted created date to model
+    model.addAttribute("formattedCreated", formattedCreated);
     model.addAttribute("article", article);
+
+
     return "article/article-details";
   }
 
